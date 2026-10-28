@@ -1,10 +1,6 @@
-from selenium import webdriver
+from tests.config import BASE_URL
 
-def test_page_de_connexion_s_ouvre():
-    driver = webdriver.Chrome()
+def test_page_de_connexion_s_ouvre(driver):
+    driver.get(f"{BASE_URL}/login")
 
-    driver.get("http://localhost:5173/login")
-
-    assert driver.current_url == "http://localhost:5173/login"
-
-    driver.quit()
+    assert driver.current_url == f"{BASE_URL}/login"
