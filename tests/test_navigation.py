@@ -47,3 +47,15 @@ def test_catalogue_to_login(driver):
     btn_connexion.click()
 
     assert driver.current_url == f"{BASE_URL}/login"
+
+def test_remplir_email_login(driver):
+    driver.get(f"{BASE_URL}/login")
+    input_email = driver.find_element(*EMAIL)
+
+    input_email.clear()
+
+    input_email.send_keys("admin@test")
+
+    assert input_email.get_attribute("value") == "admin@test"
+
+    
