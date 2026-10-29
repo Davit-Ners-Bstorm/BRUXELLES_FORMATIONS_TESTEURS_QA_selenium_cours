@@ -58,4 +58,4 @@ def test_remplir_email_login(driver):
 
     assert input_email.get_attribute("value") == "admin@test"
 
-    
+
