@@ -1,3 +1,5 @@
+from selenium.webdriver import Keys
+
 from tests.config import BASE_URL
 from selenium.webdriver.common.by import By
 import pytest
@@ -33,3 +35,26 @@ def test_incorrect_login(driver):
 
     # assert error.text == "Incorrect email or password"
     # assert driver.current_url == f"{BASE_URL}/login"
+
+def test_vraie_suppression_state_react_bizzare(driver):
+    driver.get(f"{BASE_URL}/login")
+
+    email_input = driver.find_element(*EMAIL_INPUT)
+    password_input = driver.find_element(*PASSWORD_INPUT)
+
+    email_input.click()
+    # Ici, on selectionne element, puis on supprime avec controls clavier, ce qui met à jour le state de react
+    email_input.send_keys(Keys.CONTROL, "a")
+    email_input.send_keys(Keys.BACKSPACE)
+
+    password_input.click()
+    password_input.send_keys(Keys.CONTROL, "a")
+    password_input.send_keys(Keys.BACKSPACE)
+
+    assert email_input.get_property("value") == ""
+    assert password_input.get_property("value") == ""
+
+    email_input.send_keys("123456")
+
+    assert email_input.get_property("value") == "123456"
+    assert password_input.get_property("value") == ""
