@@ -1,5 +1,7 @@
 from tests.config import BASE_URL
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import pytest
 
 LOCATORS_EX2 = [
@@ -14,6 +16,6 @@ LOCATORS_EX2 = [
 def test_locators(driver, locator):
     driver.get(f"{BASE_URL}/login")
 
-    element = driver.find_element(*locator)
+    element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(locator))
 
     assert element

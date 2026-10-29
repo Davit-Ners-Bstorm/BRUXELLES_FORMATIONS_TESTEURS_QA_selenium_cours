@@ -1,5 +1,6 @@
 from selenium.webdriver import Keys
-
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from tests.config import BASE_URL
 from selenium.webdriver.common.by import By
 import pytest
@@ -13,9 +14,10 @@ ERROR = (By.CSS_SELECTOR, ".notice-err")
 
 def test_incorrect_login(driver):
     driver.get(f"{BASE_URL}/login")
+    wait = WebDriverWait(driver, 10)
 
     # Trouver et completer email
-    email_input = driver.find_element(*EMAIL_INPUT)
+    email_input = wait.until(EC.visibility_of_element_located(EMAIL_INPUT))
     email_input.clear()
     email_input.send_keys("hzjhkrzty@aefaef")
 
@@ -30,11 +32,11 @@ def test_incorrect_login(driver):
     # Pour voir execution
     # time.sleep(5)
 
-    # BAM erreur, l'element n'existe pas encore!
-    # error = driver.find_element(*ERROR)
+    # BAM erreur corrigée!
+    error_msg = wait.until(EC.visibility_of_element_located(ERROR))
 
-    # assert error.text == "Incorrect email or password"
-    # assert driver.current_url == f"{BASE_URL}/login"
+    assert error_msg.text == "Incorrect email or password"
+    assert driver.current_url == f"{BASE_URL}/login"
 
 def test_vraie_suppression_state_react_bizzare(driver):
     driver.get(f"{BASE_URL}/login")
